@@ -1,0 +1,17 @@
+This repo is an updated version of the version of CUMP in the repo:
+
+https://github.com/skystar0227/CUMP.
+
+See the Changelog file for documentation on what has been changed.
+
+You can generate a local version of the code as follows:
+
+   * autoreconf -i
+   * make
+
+You can generate the axpy demo in the demos directory as follows:
+
+   * cd demos
+   * make CXX=nvcc
+   * ./axpy
+
