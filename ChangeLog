@@ -1,0 +1,33 @@
+2025-11-24  Randal E. Bryant <randy.bryant@cs.cmu.edu>
+	* include/cump/mpn/CUDA/mul_basecase.impl: Replace __any/__all by __any_sync/__all_sync;
+	*      compute mask of active threads using __activemask
+	* demos/Makefile-REB: Created to demonstrate compilation
+	
+2025-11-15  Randal E. Bryant <randy.bryant@cs.cmu.edu>
+	* configure.ac:  Change 'sm_20' to 'sm_89'
+	* cumpf/_ainit.cu: Change cudaThreadSynchronize to cudaDeviceSynchronize
+	
+2012-05-23  Takatoshi Nakayama  <nakayama@hpcs.cs.tsukuba.ac.jp>
+
+	* Version 1.0.1 released.
+
+2012-05-22  Takatoshi Nakayama  <nakayama@hpcs.cs.tsukuba.ac.jp>
+
+	* configure.ac: Enclose rvalues with double quotes.
+	* configure.ac (CUFLAGS): Add "-arch=sm_20" to its default value.
+
+	* Makefile.am: Change ".o" into ".$(OBJEXT)".
+	* cumpf/Makefile.am: Change ".o" into ".$(OBJEXT)".
+	* cumpf/Makefile.am: Add "SUFFIXES = .cu".
+
+	* Add a demo suite.
+	* configure.ac (AC_CONFIG_FILES): Add "demos/Makefile".
+	* Makefile.am (SUBDIRS): Add "demos".
+	* demos/axpy.cu: add a demo code.
+
+2012-05-19  Takatoshi Nakayama  <nakayama@hpcs.cs.tsukuba.ac.jp>
+	* configure.ac (USE_GMP, SPECIFY_GMP_DIR): Fix the conditional expressions.
+
+2012-03-31  Takatoshi Nakayama  <nakayama@hpcs.cs.tsukuba.ac.jp>
+
+	* Version 1.0.0 released.
