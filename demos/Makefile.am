@@ -24,7 +24,7 @@ if SPECIFY_GMP_DIR
   AM_CPPFLAGS += -I@GMP_DIR@
 endif
 
-AM_LDFLAGS = -lgmp -lcudart
+AM_LDFLAGS = -lgmp 
 
 LDADD = $(top_builddir)/libcump.a
 
@@ -32,9 +32,12 @@ CU = @CU@
 CUFLAGS = @CUFLAGS@ -cuda
 SUFFIXES = .cu
 
+#.cu.$(OBJEXT):
+#	$(CU) $(CUFLAGS) $(AM_CPPFLAGS) -o $*.cpp $<
+#	$(CXX) $(CXXFLAGS) $(AM_CPPFLAGS) -c -o $@ $*.cpp
+
 .cu.$(OBJEXT):
-	$(CU) $(CUFLAGS) $(AM_CPPFLAGS) -o $*.cpp $<
-	$(CXX) $(CXXFLAGS) $(AM_CPPFLAGS) -c -o $@ $*.cpp
+	$(CU) $(CUFLAGS) $(AM_CPPFLAGS) -o $@ $<
 
 EXTRA_PROGRAMS = axpy
 

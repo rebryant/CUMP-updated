@@ -84,9 +84,10 @@ AC_TYPE_SIZE_T
 # Checks for library functions.
 AC_FUNC_MALLOC
 
+
 AC_CONFIG_FILES([Makefile
                  cumpf/Makefile
-                 demos/Makefile
                  include/Makefile
+ 		 demos/Makefile
                  mpf/Makefile])
 AC_OUTPUT
