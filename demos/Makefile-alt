@@ -1,0 +1,12 @@
+NVCC=nvcc
+CFLAGS=-O3 -g
+INC= -I.. -I/usr/local/cuda/include
+LIB= ../libcump.a
+
+all: axpy
+
+axpy: axpy.cu
+	$(NVCC) $(CFLAGS) $(INC) -o axpy axpy.cu $(LIB) -lgmp
+
+clean:
+	rm -f *.o *~ axpy 
