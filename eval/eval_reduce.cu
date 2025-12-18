@@ -19,7 +19,7 @@ bool verbose = false;
 double min_value = 0.0;
 double max_value = 0.0;
 
-int plist[] = {64, 128, 192, 256, 320, 384, 448, 512, 576, 0};
+int plist[] = {64, 128, 192, 256, 320, 384, 448, 512, 576, 640, 704, 0};
 
 double digit_precision(mpf_srcptr x_est, mpf_srcptr x_true) {
     if (mpf_cmp(x_est, x_true) == 0)
