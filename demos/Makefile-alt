@@ -1,6 +1,6 @@
 NVCC=nvcc
 CFLAGS=-O3 -g
-INC= -I.. -I/usr/local/cuda/include
+INC= -I.. -I../include -I/usr/local/cuda/include
 LIB= ../libcump.a
 
 all: axpy
