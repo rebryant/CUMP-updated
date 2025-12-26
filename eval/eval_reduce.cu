@@ -21,7 +21,7 @@ bool verbose = false;
 double min_value = 0.0;
 double max_value = 1.0;
 
-int plist[] = {64, 128, 192, 256, 320, 384, 448, 512, 576, 0};
+int plist[] = {64, 128, 192, 256, 320, 384, 448, 512, 576, 640, 704, 0};
 
 double gmp_reduce (mpf_t dest, bool product, int  n, int reps, mpf_t  X []);
 double cump_reduce (mpf_t dest, bool product, int  n, int reps, int threads, mpf_t  X []);
