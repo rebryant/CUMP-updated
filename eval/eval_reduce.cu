@@ -11,32 +11,17 @@
 namespace cg = cooperative_groups;
 
 #include "clock.h"
+#include "mpf_extra.h"
 
 int trials = 5;
+
 
 bool verbose = false;
 
 double min_value = 0.0;
-double max_value = 0.0;
+double max_value = 1.0;
 
 int plist[] = {64, 128, 192, 256, 320, 384, 448, 512, 576, 0};
-
-double digit_precision(mpf_srcptr x_est, mpf_srcptr x_true) {
-    if (mpf_cmp(x_est, x_true) == 0)
-	return 1e6;
-    if (mpf_cmp_d(x_est, 0.0) == 0 || mpf_cmp_d(x_true, 0.0) == 0)
-	return 0.0;
-    mpf_t rel;
-    mpf_init2(rel, mpf_get_prec(x_true) * 2);
-    mpf_sub(rel, x_est, x_true);
-    mpf_div(rel, rel, x_true);
-    mpf_abs(rel, rel);
-    long int exp;
-    double drel = mpf_get_d_2exp(&exp, rel);
-    double dp = -(log10(drel) + log10(2.0) * exp);
-    mpf_clear(rel);
-    return dp < 0 ? 0 : dp;
-}
 
 double gmp_reduce (mpf_t dest, bool product, int  n, int reps, mpf_t  X []);
 double cump_reduce (mpf_t dest, bool product, int  n, int reps, int threads, mpf_t  X []);
@@ -125,32 +110,10 @@ int  main (int argc, char *argv[])
 	    max_prec = plist[pi];
     }
     int test_prec = max_prec + 64;
-    mpf_set_default_prec (test_prec);
-    mpf_t *X;
-    X = (mpf_t *) calloc(N, sizeof(mpf_t));
+    mpf_settings_init(test_prec, seed);
 
-    /* initialize mpf_t variables/arrays and set random numbers into them */
+    mpf_t *X = uniform_array_mpf(N, min_value, max_value, 0.0, seed);
 
-    gmp_randstate_t rstate;
-    gmp_randinit_default (rstate);
-    gmp_randseed_ui (rstate, seed);
-
-    mpf_t base, scale;
-    mpf_init2(base, test_prec);
-    mpf_init2(scale, test_prec);
-    mpf_set_d(base, min_value);
-    mpf_set_d(scale, max_value);
-    mpf_sub(scale, scale, base);
-
-    for (int i = 0;  i < N;  ++i) {
-	mpf_init (X [i]);
-	mpf_urandomb (X [i], rstate, max_prec);
-	mpf_mul(X[i], X[i], scale);
-	mpf_add(X[i], X[i], base);
-    }
-    gmp_randclear (rstate);
-    mpf_clear(base);
-    mpf_clear(scale);
 
     if (verbose) {
 	printf ("Calculation (vector length = %d, reps = %d, max precision = %d):\n", N, reps, max_prec);
@@ -317,42 +280,6 @@ void double_reduce_kernel (int  n, int reps, double  X_in[], double  X_out[], do
   if (tid == 0 && i < n)
       X_out[blockIdx.x] = X_tmp[i];
 }
-
-
-
-
-#if 0
-// Version using shared memory.  Not sure if this is possible
-template <bool doMul> __global__
-void  cump_reduce_kernel (int  n, mpf_array_t  X_in, mpf_array_t  X_out)
-{
-  using namespace cump;
-  cg::thread_block cta = cg::this_thread_block();
-
-  extern __shared__ mpf_array_t smem[blockDim.x][1];
-
-  int  tid = threadIdx.x;
-  int  i = blockIdx.x * blockDim.x + threadIdx.x;
-
-  cumpf_array_init(smem[tid], 1);
-  cumpf_array_set(smem[tid], i < n ? X_in[i] : U[0]);
-
-  cg::sync(cta);
-
-  for (unsigned int s = blockDim.x / 2; s > 0; s >>= 1) {
-      if (tid < s) {
-	  if (doMul)
-	      mpf_mul(smem[tid][0], smem[tid][0], smem[tid+s][0]);
-	  else
-	      mpf_add(smem[tid][0], smem[tid][0], smem[tid+s][0]);
-      }
-      cg::sync(cta);
-  }
-
-  if (tid == 0)
-      X_out[blockIdx.x] = smem[0];
-}
-#endif
 
 
 unsigned int nextPow2(unsigned int x)
