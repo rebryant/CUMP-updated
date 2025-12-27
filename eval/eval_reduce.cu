@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <gmp.h>
-#include <cump/cump.cuh>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
@@ -10,6 +9,7 @@
 #include <cooperative_groups.h>
 namespace cg = cooperative_groups;
 
+#include "cump/cump.cuh"
 #include "clock.h"
 #include "mpf_extra.h"
 
